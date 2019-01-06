@@ -52,10 +52,6 @@ class AddUserForm(FlaskForm):
     basis = SelectField('Basis(for students)', choices=[('', ''), ('budget', 'Budget'), ('contract', 'Contract')], default='')
     submit = SubmitField('Register')
 
-    def validate_group(self, group):
-        group = Group.query.filter_by(id=group.data).first()
-        if group is None:
-            raise ValidationError('There is no such group. Please use a different group number. ')
 
 
 class AddGroupForm(FlaskForm):
