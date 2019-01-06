@@ -1,0 +1,4 @@
+astroid>=2.0.0
+colorama
+isort>=4.2.5
+mccabe
