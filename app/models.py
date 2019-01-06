@@ -50,7 +50,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
 
     def __repr__(self):
-        return '<User {}>'.format(str(self.last_name) + str(self.first_name) + str(self.middle_name) + str(self.verification_code) + str(self.email))
+        return '<User {}>'.format(str(self.last_name) + ' ' + str(self.first_name) + ' ' + str(self.middle_name) + ' ' +
+                                  str(self.verification_code) + ' ' + str(self.email))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -96,7 +97,7 @@ class Student(User):
     }
 
     def __repr__(self):
-        return '<Student: {}>'.format(str(self.id) + self.verification_code + str(self.email))
+        return '<Student: {}>'.format(str(self.id) + ' ' + self.verification_code + ' ' + str(self.email))
 
 
 class Teacher(User):
@@ -109,7 +110,7 @@ class Teacher(User):
     }
 
     def __repr__(self):
-        return '<Teacher: {}>'.format(self.id)
+        return '<Teacher: {}>'.format(str(self.id) + ' ' + str(self.verification_code))
 
 
 class Admin(User):

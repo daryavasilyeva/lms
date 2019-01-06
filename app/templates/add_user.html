@@ -4,7 +4,6 @@
     <h1>Add User</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <p>Verification code:</p> <h3>{{ verification_code }}</h3>
         <p>
             {{ form.first_name.label }}<br>
             {{ form.first_name(size=64) }}<br>

@@ -100,7 +100,6 @@ def add_user():
     while code is not None:
         verification_code = get_code()
         code = User.query.filter_by(verification_code=verification_code).first()
-
     if form.validate_on_submit():
         if current_user.role != role_enum.admin:
             flash('No permission')
@@ -113,7 +112,7 @@ def add_user():
                         role='teacher')
             db.session.add(teacher)
             db.session.commit()
-            flash('Congratulations, you are now a registered user!')
+            flash('Verification code:' + ' ' + verification_code)
         else:
             student = Student(verification_code=verification_code,
                         last_name=form.last_name.data,
@@ -127,6 +126,42 @@ def add_user():
                         basis=form.basis.data)
             db.session.add(student)
             db.session.commit()
-            flash('Congratulations, you are now a registered user!')
+            flash('Verification code:' + ' ' + verification_code)
         return redirect(url_for('index'))
     return render_template('add_user.html', title='Add new user', form=form, verification_code=verification_code)
+
+
+@app.route('/add_group', methods=['GET', 'POST'])
+@login_required
+def add_group():
+    form = AddGroupForm()
+    if form.validate_on_submit():
+        if current_user.role != role_enum.admin:
+            flash('No permission')
+            return redirect(url_for('index'))
+        group = Group(id=form.id.data,
+                      name=form.name.data,
+                      faculty=form.faculty.data,
+                      course_number=form.course_number.data)
+        db.session.add(group)
+        db.session.commit()
+        flash('Group ' + form.id.data + ' has been created')
+        return redirect(url_for('index'))
+    return render_template('add_group.html', title='Add new group', form=form)
+
+@app.route('/add_course', methods=['GET', 'POST'])
+@login_required
+def add_course():
+    form = AddCourseForm()
+    if form.validate_on_submit():
+        if current_user.role != role_enum.admin:
+            flash('No permission')
+            return redirect(url_for('index'))
+        course = Course(name=form.name.data,
+                        description=form.description.data)
+        db.session.add(course)
+        db.session.commit()
+        flash('Course ' + form.name.data + ' has been created')
+        return redirect(url_for('index'))
+    return render_template('add_course.html', title='Add new course', form=form)
+
