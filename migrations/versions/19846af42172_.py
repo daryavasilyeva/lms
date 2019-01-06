@@ -1,8 +1,8 @@
-"""User, Student, Teacher, Group, Course tables
+"""empty message
 
-Revision ID: b3212ba74da2
+Revision ID: 19846af42172
 Revises: 
-Create Date: 2019-01-03 23:55:31.483038
+Create Date: 2019-01-04 14:47:21.915590
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b3212ba74da2'
+revision = '19846af42172'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -54,6 +54,11 @@ def upgrade():
     op.create_index(op.f('ix_user_last_name'), 'user', ['last_name'], unique=False)
     op.create_index(op.f('ix_user_middle_name'), 'user', ['middle_name'], unique=False)
     op.create_index(op.f('ix_user_verification_code'), 'user', ['verification_code'], unique=True)
+    op.create_table('admin',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('group_x_course',
     sa.Column('group_id', sa.Integer(), nullable=False),
     sa.Column('course_id', sa.Integer(), nullable=False),
@@ -141,6 +146,7 @@ def downgrade():
     op.drop_index(op.f('ix_homework_end_date'), table_name='homework')
     op.drop_table('homework')
     op.drop_table('group_x_course')
+    op.drop_table('admin')
     op.drop_index(op.f('ix_user_verification_code'), table_name='user')
     op.drop_index(op.f('ix_user_middle_name'), table_name='user')
     op.drop_index(op.f('ix_user_last_name'), table_name='user')

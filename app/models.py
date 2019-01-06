@@ -27,9 +27,9 @@ monitor_x_course = db.Table('monitor_x_course',
 
 
 class role_enum(enum.Enum):
-    admin = 'админимратор'
-    teacher = 'преподаватель'
-    student = 'студент'
+    admin = "admin"
+    teacher = "teacher"
+    student = "student"
 
 
 class User(UserMixin, db.Model):
@@ -50,7 +50,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
 
     def __repr__(self):
-        return '<User {}>'.format(self.last_name + self.first_name + self.middle_name)
+        return '<User {}>'.format(str(self.last_name) + str(self.first_name) + str(self.middle_name) + str(self.verification_code) + str(self.email))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -59,26 +59,25 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'user',
         'polymorphic_on': role
     }
 
 
 class degree_enum(enum.Enum):
-    bachelor = 'бакалавр'
-    specialist = 'специалист'
-    master = 'магистр'
+    bachelor = 'bachelor'
+    specialist = 'specialist'
+    master = 'master'
 
 
 class form_enum(enum.Enum):
-    fulltime = 'очная'
-    distance = 'заочная'
-    evening = 'вечерняя'
+    fulltime = 'fulltime'
+    distance = 'distance'
+    evening = 'evening'
 
 
 class basis_enum(enum.Enum):
-    budget = 'бюджетная'
-    contract = 'контрактная'
+    budget = 'budget'
+    contract = 'contract'
 
 
 class Student(User):
@@ -88,22 +87,40 @@ class Student(User):
     degree = db.Column(db.Enum(degree_enum))
     form = db.Column(db.Enum(form_enum))
     basis = db.Column(db.Enum(basis_enum))
-    courses = db.relationship('Course', secondary=monitor_x_course, lazy='dynamic',
-                              backref=db.backref('monitors', lazy=True))
+    # courses = db.relationship(
+    #     'Course', secondary=monitor_x_course,
+    #     backref=db.backref('monitors', lazy='dynamic'), lazy='dynamic')
 
     __mapper_args__ = {
-        'polymorphic_identity': 'student',
+        'polymorphic_identity': role_enum.student,
     }
+
+    def __repr__(self):
+        return '<Student: {}>'.format(str(self.id) + self.verification_code + str(self.email))
 
 
 class Teacher(User):
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    courses = db.relationship('Course', secondary=teacher_x_course, lazy='dynamic',
-        backref=db.backref('teachers', lazy=True))
+    # courses = db.relationship('Course', secondary=teacher_x_course, lazy='dynamic',
+    #     backref=db.backref('teachers', lazy=True))
 
     __mapper_args__ = {
-        'polymorphic_identity': 'teacher',
+        'polymorphic_identity': role_enum.teacher,
     }
+
+    def __repr__(self):
+        return '<Teacher: {}>'.format(self.id)
+
+
+class Admin(User):
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': role_enum.admin,
+    }
+
+    def __repr__(self):
+        return '<Administrator: {}>'.format(str(self.id) + str(self.role))
 
 
 class Group(db.Model):
@@ -112,8 +129,11 @@ class Group(db.Model):
     faculty = db.Column(db.String(64))
     course_number = db.Column(db.Integer)
     students = db.relationship('Student', backref='student', lazy=True)
-    courses = db.relationship('Course', secondary=group_x_course, lazy='dynamic',
-        backref=db.backref('groups', lazy=True))
+    # courses = db.relationship('Course', secondary=group_x_course, lazy='dynamic',
+    #     backref=db.backref('groups', lazy=True))
+
+    def __repr__(self):
+        return '<Group: {}>'.format(self.id)
 
 
 class Course(db.Model):
@@ -124,8 +144,12 @@ class Course(db.Model):
         backref=db.backref('courses', lazy=True))
     teachers = db.relationship('Teacher', secondary=teacher_x_course, lazy='dynamic',
         backref=db.backref('courses', lazy=True))
-    monitors = db.relationship('Student', secondary=group_x_course, lazy='dynamic',
+    monitors = db.relationship('Student', secondary=monitor_x_course, lazy='dynamic',
         backref=db.backref('courses', lazy=True))
+
+    def __repr__(self):
+        return '<Course: {}>'.format(self.id)
+
 
 class Materials(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -133,6 +157,9 @@ class Materials(db.Model):
     name = db.Column(db.String(64))
     description = db.Column(db.String(200))
     created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Materials: {}>'.format(self.id)
 
 
 class Homework(db.Model):
@@ -143,9 +170,16 @@ class Homework(db.Model):
     start_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     end_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    def __repr__(self):
+        return '<Homework: {}>'.format(self.id)
+
+
 class Homework_parcel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), primary_key=True)
     homework_id = db.Column(db.Integer, db.ForeignKey('homework.id'), primary_key=True)
     send_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     text = db.Column(db.String(200))
+
+    def __repr__(self):
+        return '<Homework_parcel: {}>'.format(self.id)

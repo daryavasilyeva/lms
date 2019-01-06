@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add User</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>Verification code:</p> <h3>{{ verification_code }}</h3>
+        <p>
+            {{ form.first_name.label }}<br>
+            {{ form.first_name(size=64) }}<br>
+            {% for error in form.first_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.last_name.label }}<br>
+            {{ form.last_name(size=64) }}<br>
+            {% for error in form.last_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.middle_name.label }}<br>
+            {{ form.middle_name(size=64) }}<br>
+            {% for error in form.middle_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.type.label }}<br>
+            {{ form.type(size=4) }}<br>
+            {% for error in form.type.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+         <p>
+            {{ form.group.label }}<br>
+            {{ form.group(size=4) }}<br>
+            {% for error in form.group.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.year_admission.label }}<br>
+            {{ form.year_admission(size=4) }}<br>
+            {% for error in form.year_admission.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.degree.label }}<br>
+            {{ form.degree(size=4) }}<br>
+            {% for error in form.degree.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.form.label }}<br>
+            {{ form.form(size=4) }}<br>
+            {% for error in form.form.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.basis.label }}<br>
+            {{ form.basis(size=4
+            ) }}<br>
+            {% for error in form.basis.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
