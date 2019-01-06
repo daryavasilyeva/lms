@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/daryavasilyeva/lms/branch/master/graph/badge.svg)](https://codecov.io/gh/daryavasilyeva/lms)
 [![Build Status](https://travis-ci.org/daryavasilyeva/lms.svg?branch=master)](https://travis-ci.org/daryavasilyeva/lms)
 
 Final project for PPPoSD 
