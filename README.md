@@ -11,7 +11,7 @@ It's a platform for managing study process.
 * Login with mail: `dasha@mail.com` and password = `cat` - as admin; 
 * Create new user (teacher or student), group, course (as admin);
 * After creating teacher or student a special verification code is shown;
-* You can sign up with verification code. You can't sign up with one verification code twice; 
+* You can sign up with verification code. You can't sign up with one verification code twice (codes to sign up: *Cg6Vs2Vd0Hq2, Rr5Vi3Im7Wj6*); 
 * As teacher or student you don't have permission to add new users, groups or courses 
 * There is a validation for email field
 
